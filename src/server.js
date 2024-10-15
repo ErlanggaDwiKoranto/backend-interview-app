@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 5000;
 
 // Configure CORS
 const corsOptions = {
-  origin: 'https://frontend-interview-cxtb7uzf9-krzystals-projects.vercel.app/',  // Ganti dengan domain frontend Anda
+  origin: 'https://frontend-interview-app.vercel.app',  // Ganti dengan domain frontend Anda
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
