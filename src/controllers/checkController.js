@@ -56,7 +56,7 @@ const saveFolderLink = async (req, res) => {
               idTele: idTele
           },
           data: {
-              FolderLink: folderUrl 
+              VideoLink: folderUrl 
           }
       });
       res.status(200).json({ message: 'Folder link saved successfully' });
@@ -71,11 +71,11 @@ const getFolderLink = async (req, res) => {
   try {
     const user = await prisma.data_user.findUnique({
       where: { idTele: idTele },  // Cari berdasarkan idTele
-      select: { FolderLink: true }  // Ambil hanya FolderLink dari user
+      select: { VideoLink: true }  // Ambil hanya FolderLink dari user
     });
     
-    if (user && user.FolderLink) {
-      res.status(200).json({ folderUrl: user.FolderLink });  // Kembalikan folder link
+    if (user && user.VideoLink) {
+      res.status(200).json({ folderUrl: user.VideoLink });  // Kembalikan folder link
     } else {
       res.status(404).json({ message: 'Folder link not found' });  // Jika tidak ada folder link
     }
