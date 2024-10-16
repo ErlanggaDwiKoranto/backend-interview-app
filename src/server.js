@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 5000;
 
 // Configure CORS
 const corsOptions = {
-  origin: 'https://frontend-interview-app.vercel.app',  // Ganti dengan domain frontend Anda
+  origin: "https://frontend-interview-app.vercel.app",  // Ganti dengan domain frontend Anda
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
@@ -30,10 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Use imported routes
-app.use('/api', loginRouter);
-app.use('/api', roleRouter);
-app.use('/api', checkRouter);
-app.use('/api', interviewRouter);
+app.use(loginRouter, roleRouter, checkRouter, interviewRouter);
 
 // Error handling for unhandled errors
 app.use((err, req, res, next) => {

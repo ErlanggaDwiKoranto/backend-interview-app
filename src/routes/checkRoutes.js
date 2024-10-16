@@ -6,7 +6,7 @@ const checkRouter = new express.Router();
 checkRouter.get('/data-user/:idTele', getUserByIdTele);
 checkRouter.get('/create-folder/:idTele', createAndShareFolder);
 checkRouter.get('/find-folder-exist/:idTele', findFolder);
-checkRouter.post('/save-folder-link', saveFolderLink); // New route for saving folder link
+checkRouter.post('/save-folder-link', saveFolderLink);
 checkRouter.get('/get-folder-link/:idTele', getFolderLink);
 
 module.exports = { checkRouter };

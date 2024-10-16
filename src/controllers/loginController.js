@@ -8,6 +8,8 @@ const login = async (req, res) => {
     const user = await prisma.data_user.findUnique({
       where: { idTele: idTele }
     });
+
+    console.log(user);
     if (user && user.password === password) { // Periksa password, sebaiknya gunakan bcrypt.compare()
       
       res.status(200).json({ message: 'Login berhasil' });
