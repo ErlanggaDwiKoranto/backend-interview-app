@@ -3,9 +3,6 @@ const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 
-// Required dependencies
-const { google } = require('googleapis');
-
 // Initialize credentials
 const credentials = {
     type: "service_account",

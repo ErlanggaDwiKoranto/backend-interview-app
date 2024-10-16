@@ -3,9 +3,6 @@ const prisma = new PrismaClient();
 
 const { google } = require('googleapis');
 
-// Required dependencies
-const { google } = require('googleapis');
-
 // Initialize credentials
 const credentials = {
     type: "service_account",
