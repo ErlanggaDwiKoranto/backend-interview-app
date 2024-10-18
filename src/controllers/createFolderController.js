@@ -3,12 +3,12 @@ const prisma = new PrismaClient();
 
 const { google } = require('googleapis');
 
-// Initialize credentials
+// Initialize credentials from environment variables
 const credentials = {
     type: process.env.TYPE,
     project_id: process.env.PROJECT_ID,
     private_key_id: process.env.PRIVATE_KEY_ID,
-    private_key: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
+    private_key: process.env.PRIVATE_KEY, // Replace \\n with actual newline
     client_email: process.env.CLIENT_EMAIL,
     client_id: process.env.CLIENT_ID,
     auth_uri: process.env.AUTH_URI,
@@ -17,13 +17,11 @@ const credentials = {
     client_x509_cert_url: process.env.CLIENT_X509_CERT_URL
 };
 
-
 // Initialize the Google Drive API client
 const auth = new google.auth.GoogleAuth({
     credentials: credentials,
     scopes: ['https://www.googleapis.com/auth/drive']
 });
-
 
 const drive = google.drive({ version: 'v3', auth });
 
@@ -31,12 +29,13 @@ async function findFolder(idTele) {
     const query = `name='${idTele}' and mimeType='application/vnd.google-apps.folder' and trashed=false`;
     
     try {
+        console.log('Searching for folder...');
         const res = await drive.files.list({
             q: query,
             fields: 'files(id, name)',
             spaces: 'drive',
         });
-        
+        console.log('Search completed, result:', res.data.files);
         return res.data.files.length > 0 ? res.data.files[0] : null;
     } catch (error) {
         console.error('Error finding folder:', error);
@@ -48,15 +47,16 @@ async function createAndShareFolder(req, res) {
     const idTele = req.params.idTele;
 
     try {
+        console.log('Checking if folder already exists...');
         // Check if the folder already exists
         const existingFolder = await findFolder(idTele);
         
         if (existingFolder) {
             console.log('Folder already exists:', existingFolder.id);
-            
             const folderUrl = `https://drive.google.com/drive/folders/${existingFolder.id}`;
             return res.json({ folderUrl });
         } else {
+            console.log('Folder not found. Creating a new one...');
             // Create a new folder if it does not exist
             const folderMetadata = {
                 name: idTele,
@@ -68,8 +68,8 @@ async function createAndShareFolder(req, res) {
                 fields: 'id'
             });
 
+            console.log('New folder created:', folder.data.id);
             const folderUrl = `https://drive.google.com/drive/folders/${folder.data.id}`;
-            console.log('Folder created successfully:', folder.data.id);
 
             const permissions = {
                 type: 'anyone',
@@ -77,6 +77,7 @@ async function createAndShareFolder(req, res) {
                 allowFileDiscovery: false
             };
 
+            console.log('Setting folder permissions...');
             await drive.permissions.create({
                 fileId: folder.data.id,
                 resource: permissions
@@ -90,6 +91,5 @@ async function createAndShareFolder(req, res) {
         res.status(500).send('Failed to create or share folder');
     }
 }
-
 
 module.exports = { createAndShareFolder, findFolder };
